@@ -1,0 +1,73 @@
+{
+  "name": "redux-apimap",
+  "version": "0.0.1",
+  "description": "REST API endpoint mapping for Redux",
+  "author": "Sebastian Borrazas <hi@sborrazas.com> http://sborrazas.com",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sborrazas/redux-apimap/issues"
+  },
+  "homepage": "https://github.com/sborrazas/redux-apimap",
+  "keywords": [
+    "redux",
+    "api",
+    "rest",
+    "http",
+    "middleware",
+    "fetch",
+    "endpoint",
+    "react",
+    "reactjs",
+    "action",
+    "flux"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sborrazas/redux-apimap.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublish": "make clean build"
+  },
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "babel-cli": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "eslint": "^3.16.1",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.0",
+    "jsdom": "^9.11.0",
+    "nock": "^9.0.9",
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "spy": "^1.0.0"
+  },
+  "dependencies": {
+    "invariant": "^2.2.2",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.4",
+    "lodash-es": "^4.2.0",
+    "urlsearchparams": "^0.1.1"
+  },
+  "peerDependencies": {
+    "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0-0"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit",
+    "files": [
+      "test/*.js",
+      "!test/setupDom.js"
+    ]
+  }
+}
