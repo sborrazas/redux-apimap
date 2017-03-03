@@ -1,5 +1,7 @@
 # Redux ApiMap
 
+[![Build Status](https://travis-ci.org/sborrazas/redux-apimap.svg?branch=master)](https://travis-ci.org/sborrazas/redux-apimap)
+
 Build your API wrapper to dispatch actions, by mapping every action an API
 endpoint.
 
