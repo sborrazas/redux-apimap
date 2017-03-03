@@ -48,7 +48,7 @@ export default (path, options = {}) => {
 
   let url = path;
 
-  if (CONTENTLESS_METHODS.includes(method)) {
+  if (_.includes(CONTENTLESS_METHODS, method)) {
     if (!_.isEmpty(params)) {
       url = `${url}?${fillForm([], params, new URLSearchParams()).toString()}`;
     }
