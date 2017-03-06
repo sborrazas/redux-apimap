@@ -1,12 +1,11 @@
 import 'isomorphic-fetch';
+import 'isomorphic-form-data';
 import { stringify } from 'mini-querystring';
 import _ from 'lodash';
 
-const { fetch, FormData } = global;
-
 const CONTENTLESS_METHODS = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
 
-const fillForm = (namespace, params, form = new FormData()) => {
+const fillForm = (namespace, params, form = new global.FormData()) => {
   const namespaceStr = _.reduce(
     _.tail(namespace),
     (nsStr, nsSlice) => `${nsStr}[${nsSlice}]`,
@@ -52,7 +51,7 @@ export default (path, options = {}) => {
     fetchOptions.body = fillForm([], params);
   }
 
-  return fetch(url, fetchOptions)
+  return global.fetch(url, fetchOptions)
     .then((response) => {
       if (response.ok) {
         if (options.json) {
