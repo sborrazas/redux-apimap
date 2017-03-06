@@ -6,9 +6,9 @@ Build your API wrapper to dispatch actions, by mapping every action an API
 endpoint.
 
 **Does not create actions or reducers**, instead it provides a simple API
-wrapper built on top of the
-[fetch API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API), with some
-additional options for ease of use (JSON wrapper, CSRF token handling, etc).
+wrapper built on top of the [fetch API](https://fetch.spec.whatwg.org/), with
+some additional options for ease of use (JSON/multipart-form wrapper, global
+configuration, etc).
 
 Requires [React](https://github.com/facebook/react) to render components.
 
@@ -37,7 +37,7 @@ npm install redux-apimap
           },
           create: {
             types: [USERS_CREATE, USERS_CREATE_SUCCESS, USERS_CREATE_FAILURE],
-            method: 'POST', // Option, submit request as multipart
+            method: 'POST', // Option, submit request with POST
             multipart: true, // Option, submit request as multipart
           }
         }
@@ -94,7 +94,7 @@ The dispatched actions have the following structure:
 * `url` — The URL in which the HTTP request was sent to.
 * `data` — If the `json: true` option was specified, contains the response
   content. Otherwise, it contains the response itself provided by the
-  [fetch API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API). Only
+  [fetch API](https://fetch.spec.whatwg.org/). Only
   present on the `SUCCESS` and `FAILURE` actions.
 
 Sample action set:
@@ -242,7 +242,7 @@ The wrapper React component to allow child components access the API object.
 * `config` (optional, default `{}`) — Configuration that is used for all
   actions. Specification:
   * `fetch` (optional, defaults to the
-    [fetch API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)) — The
+    [fetch API](https://fetch.spec.whatwg.org/)) — The
     function to use to perform the HTTP request.
   * `method` (optional, default `GET`) — The method of the HTTP request.
   * `multipart` (optional, default `false`) — If `true`, a multipart HTTP
@@ -250,8 +250,7 @@ The wrapper React component to allow child components access the API object.
   * `json` (optional, default `false`) — If true, a JSON-formatted HTTP request
     will be sent. This also sets the `Accept` header to `application/json`.
   * Any additional options that can be sent to the
-    [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch)
-    function.
+    [fetch API](https://fetch.spec.whatwg.org/) function.
 
 ### connectApi(Component)
 
