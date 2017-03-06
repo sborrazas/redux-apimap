@@ -1,6 +1,7 @@
 import test from 'ava';
 import _ from 'lodash';
 import nock from 'nock';
+import spy from 'spy';
 
 import fetch from '../src/fetch';
 
@@ -108,5 +109,25 @@ test.cb('Sends additional headers when specified', (t) => {
     .then((result) => {
       t.deepEqual(result, TEST_CONTENT);
       t.end();
+    });
+});
+
+test.cb('Sends additional options when specified', (t) => {
+  const cns = spy(global, 'fetch');
+  cns.mock((url, options) => {
+    t.is(options.credentials, 'same-origin');
+
+    return cns.method(url, options);
+  });
+  nock(BASE_URL)
+    .get('/users')
+    .reply(200, {});
+
+  t.plan(1);
+
+  performRequest(t, '/users', {}, { credentials: 'same-origin' })
+    .then(() => {
+      t.end();
+      cns.restore();
     });
 });

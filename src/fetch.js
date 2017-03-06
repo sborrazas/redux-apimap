@@ -26,16 +26,18 @@ const fillForm = (namespace, params, form = new global.FormData()) => {
 };
 
 export default (path, options = {}) => {
-  const params = options.params || {};
-  const method = options.method || 'GET';
-  const fetchHeaders = { ...options.headers };
-  const fetchOptions = {
-    method,
-    headers: fetchHeaders,
-  };
+  const {
+    method = 'GET',
+    params = {},
+    headers = {},
+    ...fetchOptions
+  } = options;
+
+  fetchOptions.method = method;
+  fetchOptions.headers = headers;
 
   if (options.json) {
-    fetchHeaders.Accept = 'application/json';
+    headers.Accept = 'application/json';
   }
 
   let url = path;
@@ -45,7 +47,7 @@ export default (path, options = {}) => {
       url = `${url}?${stringify(params, true)}`;
     }
   } else if (options.json) {
-    fetchHeaders['Content-Type'] = 'application/json';
+    headers['Content-Type'] = 'application/json';
     fetchOptions.body = JSON.stringify(params);
   } else if (!_.isEmpty(params)) {
     fetchOptions.body = fillForm([], params);
