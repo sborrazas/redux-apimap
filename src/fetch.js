@@ -1,19 +1,13 @@
 import 'isomorphic-fetch';
-import {
-  URLSearchParams as realURLSearchParams,
-} from 'urlsearchparams';
+import { stringify } from 'mini-querystring';
 import _ from 'lodash';
 
-if (!global.URLSearchParams) {
-  global.URLSearchParams = realURLSearchParams;
-}
-
-const { fetch, FormData, URLSearchParams } = global;
+const { fetch, FormData } = global;
 
 const CONTENTLESS_METHODS = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
 const CSRF_HEADER_NAME = 'X-CSRFToken';
 
-const fillForm = (namespace, params, form) => {
+const fillForm = (namespace, params, form = new FormData()) => {
   const namespaceStr = _.reduce(
     _.tail(namespace),
     (nsStr, nsSlice) => `${nsStr}[${nsSlice}]`,
@@ -50,14 +44,14 @@ export default (path, options = {}) => {
 
   if (_.includes(CONTENTLESS_METHODS, method)) {
     if (!_.isEmpty(params)) {
-      url = `${url}?${fillForm([], params, new URLSearchParams()).toString()}`;
+      url = `${url}?${stringify(params, true)}`;
     }
   } else {
     if (options.json) {
       fetchHeaders['Content-Type'] = 'application/json';
       fetchOptions.body = JSON.stringify(params);
     } else if (!_.isEmpty(params)) {
-      fetchOptions.body = fillForm([], params, new FormData());
+      fetchOptions.body = fillForm([], params);
     }
     if (options.CSRFToken) {
       fetchHeaders[CSRF_HEADER_NAME] = options.CSRFToken;

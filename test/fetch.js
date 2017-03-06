@@ -77,6 +77,22 @@ test.cb('Encodes nested query string parameters on multipart requests', (t) => {
     });
 });
 
+test.cb('Encodes JSON requests', (t) => {
+  const params = { a: { b: { c: 1 } } };
+
+  nock(BASE_URL)
+    .post('/users')
+    .reply(200, (uri, requestBody) => requestBody);
+
+  t.plan(1);
+
+  performRequest(t, '/users', params, { method: 'POST' })
+    .then((result) => {
+      t.deepEqual(result, params);
+      t.end();
+    });
+});
+
 test.cb('Sends CSRF header when specifying CSRFToken option', (t) => {
   const CSRFToken = 'b460bdf7fc59f957b1d6e31697131264';
 
