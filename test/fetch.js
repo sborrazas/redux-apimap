@@ -93,8 +93,9 @@ test.cb('Encodes JSON requests', (t) => {
     });
 });
 
-test.cb('Sends CSRF header when specifying CSRFToken option', (t) => {
+test.cb('Sends additional headers when specified', (t) => {
   const CSRFToken = 'b460bdf7fc59f957b1d6e31697131264';
+  const headers = { 'X-CSRFToken': CSRFToken };
 
   nock(BASE_URL)
     .post('/users')
@@ -103,7 +104,7 @@ test.cb('Sends CSRF header when specifying CSRFToken option', (t) => {
 
   t.plan(1);
 
-  performRequest(t, '/users', {}, { method: 'POST', CSRFToken })
+  performRequest(t, '/users', {}, { method: 'POST', headers })
     .then((result) => {
       t.deepEqual(result, TEST_CONTENT);
       t.end();

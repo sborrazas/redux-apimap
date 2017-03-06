@@ -249,8 +249,6 @@ The wrapper React component to allow child components access the API object.
     request will be sent (overrides `json` option).
   * `json` (optional, default `false`) — If true, a JSON-formatted HTTP request
     will be sent. This also sets the `Accept` header to `application/json`.
-  * `CSRFToken` (optional) — If sent, additional HTTP headers will be sent to
-    validate the request.
   * Any additional options that can be sent to the
     [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch)
     function.
@@ -263,6 +261,21 @@ Connect the React component to get the `api` prop.
 
 * `Component` (required) — The React component to connect to. Must be nested
   somewhere inside the `ApiProvider` component.
+
+## Sample configurations
+
+### Include CSRF header
+
+```js
+createApi(store, endpoints, {
+  headers: {
+    'X-CSRFToken': document.getElementsByName("csrf-token")[0].content,
+  },
+});
+```
+
+**Note:** `X-CSRF-Token` header is used for Flask/Django applications. Use
+`X-CSRF-Token` for Rack applications.
 
 ## Authors
 

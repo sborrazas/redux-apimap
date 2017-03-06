@@ -5,7 +5,6 @@ import _ from 'lodash';
 const { fetch, FormData } = global;
 
 const CONTENTLESS_METHODS = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
-const CSRF_HEADER_NAME = 'X-CSRFToken';
 
 const fillForm = (namespace, params, form = new FormData()) => {
   const namespaceStr = _.reduce(
@@ -46,16 +45,11 @@ export default (path, options = {}) => {
     if (!_.isEmpty(params)) {
       url = `${url}?${stringify(params, true)}`;
     }
-  } else {
-    if (options.json) {
-      fetchHeaders['Content-Type'] = 'application/json';
-      fetchOptions.body = JSON.stringify(params);
-    } else if (!_.isEmpty(params)) {
-      fetchOptions.body = fillForm([], params);
-    }
-    if (options.CSRFToken) {
-      fetchHeaders[CSRF_HEADER_NAME] = options.CSRFToken;
-    }
+  } else if (options.json) {
+    fetchHeaders['Content-Type'] = 'application/json';
+    fetchOptions.body = JSON.stringify(params);
+  } else if (!_.isEmpty(params)) {
+    fetchOptions.body = fillForm([], params);
   }
 
   return fetch(url, fetchOptions)
