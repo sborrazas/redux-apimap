@@ -15,7 +15,7 @@ const interpolateParams = (rawUrl, params) => {
   return { requestParams, url };
 };
 
-const createActions = (actions, endpointUrl, dispatch, initialOptions) =>
+const createActions = (actions, endpointPath, dispatch, initialOptions) =>
   _.mapValues(actions, (action) => {
     const {
       fetch: _fetch,
@@ -23,7 +23,7 @@ const createActions = (actions, endpointUrl, dispatch, initialOptions) =>
       types,
       ...options
     } = { ...initialOptions, ...action };
-    let rawUrl = endpointUrl;
+    let rawUrl = endpointPath;
 
     if (path) {
       rawUrl = `${rawUrl}${path}`;
@@ -96,10 +96,10 @@ export default (store, endpoints, initialOptions = {}) => {
     '`fetch` option must be a function of 2 arguments (url, options).',
   );
 
-  return _.mapValues(endpoints, ({ url, actions }, name) => {
-    invariant(url, `Missing \`url\` option on \`${name}\` endpoint.`);
+  return _.mapValues(endpoints, ({ path, actions }, name) => {
+    invariant(path, `Missing \`path\` option on \`${name}\` endpoint.`);
     invariant(actions, `Missing \`actions\` option on \`${name}\` endpoint.`);
 
-    return createActions(actions, url, store.dispatch, options);
+    return createActions(actions, path, store.dispatch, options);
   });
 };

@@ -230,7 +230,7 @@ The wrapper React component to allow child components access the API object.
   [Redux Store](http://redux.js.org/docs/basics/Store.html).
 * `endpoints` (required) — An object mapping all the API endpoints. Each
   endpoint has the following specification:
-  * `url` (required) — The url of the endpoint. This allows interpolating
+  * `path` (required) — The path of the endpoint. This allows interpolating
     parameters (e.g. `/users/:id/posts`).
   * `actions` (required) — The actions this endpoint allows. Each action has the
     following specification:
@@ -239,6 +239,7 @@ The wrapper React component to allow child components access the API object.
       successfully and fails respectively.
     * Any additional configuration for this specific action. This configuration
       object has the same values as the `config` configuration from below.
+    * `path` (optional) – If present, appends this path to the endpoint's path.
 * `config` (optional, default `{}`) — Configuration that is used for all
   actions. Specification:
   * `fetch` (optional, defaults to the
@@ -249,6 +250,7 @@ The wrapper React component to allow child components access the API object.
     request will be sent (overrides `json` option).
   * `json` (optional, default `false`) — If true, a JSON-formatted HTTP request
     will be sent. This also sets the `Accept` header to `application/json`.
+  * `baseUrl` – If present, prefixes every path with this URL.
   * Any additional options that can be sent to the
     [fetch API](https://fetch.spec.whatwg.org/) function.
 

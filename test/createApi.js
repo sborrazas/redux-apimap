@@ -14,7 +14,7 @@ const GENERIC_FAILURE = 'GENERIC_FAILURE';
 const baseUrl = 'http://test.com';
 
 const users = {
-  url: '/users',
+  path: '/users',
   actions: {
     fetch: {
       types: [FETCH_PENDING, FETCH_SUCCESS, FETCH_FAILURE],
@@ -28,14 +28,14 @@ const users = {
 };
 
 const user = {
-  url: '/user/:id',
+  path: '/user/:id',
   actions: {
     update: {
       method: 'PUT',
       types: [GENERIC_PENDING, GENERIC_SUCCESS, GENERIC_FAILURE],
     },
     disable: {
-      path: 'disable',
+      path: '/disable',
       method: 'POST',
       types: [GENERIC_PENDING, GENERIC_SUCCESS, GENERIC_FAILURE],
     },
@@ -69,7 +69,7 @@ test('Validates `type` on every action', (t) => {
   t.throws(() => {
     createMockApi({
       missingTypesEndpoint: {
-        url: '/missing-types-endpoint',
+        path: '/missing-types-endpoint',
         actions: {
           fetch: {},
         },
@@ -78,10 +78,10 @@ test('Validates `type` on every action', (t) => {
   });
 });
 
-test('Validates `url` on every action', (t) => {
+test('Validates `path` on every action', (t) => {
   t.throws(() => {
     createMockApi({
-      missingUrlEndpoint: {
+      missingPathEndpoint: {
         actions: {
           fetch: {},
         },
@@ -90,7 +90,7 @@ test('Validates `url` on every action', (t) => {
   });
 });
 
-test('Validates `action` on every action', (t) => {
+test('Validates `actions` on every endpoint', (t) => {
   t.throws(() => {
     createMockApi({
       missingUrlEndpoint: {
@@ -130,6 +130,23 @@ test.cb('API triggers an API request through the default fetch', (t) => {
   const api = createUsersApi({});
 
   api.users.fetch().then((result) => {
+    t.deepEqual(result, content);
+    t.end();
+  });
+});
+
+test.cb('API triggers an API request with interpolation & custom action path', (t) => {
+  const content = { name: 'U1' };
+
+  t.plan(1);
+
+  nock(baseUrl)
+    .post('/user/1/disable')
+    .reply(200, content);
+
+  const api = createUsersApi({});
+
+  api.user.disable({ id: 1 }).then((result) => {
     t.deepEqual(result, content);
     t.end();
   });
