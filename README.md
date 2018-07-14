@@ -102,28 +102,34 @@ Sample action set:
 // PENDING
 {
   type: 'USER_UPDATE',
-  params: { name: 'Officer Barbrady' },
-  url: '/users/1'
+  payload: {
+    params: { name: 'Officer Barbrady' },
+    url: '/users/1'
+  }
 }
 
 // SUCCESS (when json: true)
 {
   type: 'USER_UPDATE_SUCCESS',
-  params: { name: 'Officer Barbrady' },
-  url: '/users/1',
-  data: {
-    id: 1,
-    name: 'Officer Barbrady'
+  payload: {
+    params: { name: 'Officer Barbrady' },
+    url: '/users/1',
+    data: {
+        id: 1,
+        name: 'Officer Barbrady'
+    }
   }
 }
 
 // FAILURE (when json: true)
 {
   type: 'USER_UPDATE_FAILURE',
-  params: { name: '' },
-  url: '/users/1',
-  data: {
-    { name: 'too short' }
+  payload: {
+    params: { name: '' },
+    url: '/users/1',
+    data: {
+        { name: 'too short' }
+    }
   }
 }
 ```
