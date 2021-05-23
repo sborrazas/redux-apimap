@@ -46,6 +46,8 @@ export default (path, options = {}) => {
     if (!_.isEmpty(params)) {
       url = `${url}?${stringify(params, true)}`;
     }
+  } else if (options.multipart) {
+    fetchOptions.body = fillForm([], params);
   } else if (options.json) {
     headers['Content-Type'] = 'application/json';
     fetchOptions.body = JSON.stringify(params);
