@@ -68,7 +68,7 @@ test('Encodes nested query string parameters on multipart requests', (t) => {
     .post(path)
     .reply(200, (uri, requestBody) => {
       t.regex(requestBody, /a\[b\]\[c\]/);
-      t.regex(requestBody, new RegExp(/^\s*1$/, 'm'));
+      t.regex(requestBody, new RegExp('^\\s*1$', 'm'));
 
       return expectedResult;
     });
