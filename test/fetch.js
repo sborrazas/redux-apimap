@@ -19,20 +19,19 @@ const performRequest = (t, url, params, options = {}) =>
       t.end();
     });
 
-test.cb('Encodes JSON response', (t) => {
+test('Encodes JSON response', (t) => {
   nock(BASE_URL)
     .get('/users')
     .reply(200, TEST_CONTENT);
 
   t.plan(1);
 
-  performRequest(t, '/users').then((result) => {
+  return performRequest(t, '/users').then((result) => {
     t.deepEqual(result, TEST_CONTENT);
-    t.end();
   });
 });
 
-test.cb('Encodes query string parameters on GET requests', (t) => {
+test('Encodes query string parameters on GET requests', (t) => {
   const params = { p1: 'a' };
 
   nock(BASE_URL)
@@ -41,13 +40,12 @@ test.cb('Encodes query string parameters on GET requests', (t) => {
 
   t.plan(1);
 
-  performRequest(t, '/users', params).then((result) => {
+  return performRequest(t, '/users', params).then((result) => {
     t.deepEqual(result, TEST_CONTENT);
-    t.end();
   });
 });
 
-test.cb('Encodes nested query string parameters on GET requests', (t) => {
+test('Encodes nested query string parameters on GET requests', (t) => {
   const params = { a: { b: { c: 1 } } };
 
   nock(BASE_URL)
@@ -56,45 +54,50 @@ test.cb('Encodes nested query string parameters on GET requests', (t) => {
 
   t.plan(1);
 
-  performRequest(t, '/users', params).then((result) => {
+  return performRequest(t, '/users', params).then((result) => {
     t.deepEqual(result, TEST_CONTENT);
-    t.end();
   });
 });
 
-test.cb('Encodes nested query string parameters on multipart requests', (t) => {
+test('Encodes nested query string parameters on multipart requests', (t) => {
   const params = { a: { b: { c: 1 } } };
+  const expectedResult = { x: 1 };
+  const path = '/encode-multipart';
 
   nock(BASE_URL)
-    .post('/users')
-    .reply(200, (uri, requestBody) => requestBody);
+    .post(path)
+    .reply(200, (uri, requestBody) => {
+      t.regex(requestBody, /a\[b\]\[c\]/);
+      t.regex(requestBody, new RegExp(/^\s*1$/, 'm'));
 
-  t.plan(1);
+      return expectedResult;
+    });
 
-  performRequest(t, '/users', params, { method: 'POST', multipart: true })
+  t.plan(3);
+
+  return performRequest(t, path, params, { method: 'POST', multipart: true })
     .then((result) => {
-      t.deepEqual(result, params);
-      t.end();
+      t.deepEqual(result, expectedResult);
     });
 });
 
-test.cb('Encodes JSON requests', (t) => {
+test('Encodes JSON requests', (t) => {
   const params = { a: { b: { c: 1 } } };
-
-  nock(BASE_URL)
-    .post('/users')
-    .reply(200, (uri, requestBody) => requestBody);
+  const path = '/encode-json-req';
 
   t.plan(1);
 
-  performRequest(t, '/users', params, { method: 'POST' })
+  nock(BASE_URL)
+    .post(path)
+    .reply(200, (uri, requestBody) => requestBody);
+
+  return performRequest(t, path, params, { method: 'POST' })
     .then((result) => {
       t.deepEqual(result, params);
-      t.end();
     });
 });
 
-test.cb('Sends additional headers when specified', (t) => {
+test('Sends additional headers when specified', (t) => {
   const CSRFToken = 'b460bdf7fc59f957b1d6e31697131264';
   const headers = { 'X-CSRFToken': CSRFToken };
 
@@ -105,14 +108,13 @@ test.cb('Sends additional headers when specified', (t) => {
 
   t.plan(1);
 
-  performRequest(t, '/users', {}, { method: 'POST', headers })
+  return performRequest(t, '/users', {}, { method: 'POST', headers })
     .then((result) => {
       t.deepEqual(result, TEST_CONTENT);
-      t.end();
     });
 });
 
-test.cb('Sends additional options when specified', (t) => {
+test('Sends additional options when specified', (t) => {
   const cns = spy(global, 'fetch');
   cns.mock((url, options) => {
     t.is(options.credentials, 'same-origin');
@@ -125,9 +127,8 @@ test.cb('Sends additional options when specified', (t) => {
 
   t.plan(1);
 
-  performRequest(t, '/users', {}, { credentials: 'same-origin' })
+  return performRequest(t, '/users', {}, { credentials: 'same-origin' })
     .then(() => {
-      t.end();
       cns.restore();
     });
 });
