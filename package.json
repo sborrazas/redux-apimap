@@ -1,6 +1,6 @@
 {
   "name": "redux-apimap",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "REST API endpoint mapping for Redux",
   "author": "Sebastian Borrazas <hi@sborrazas.com> http://sborrazas.com",
   "main": "dist/index.js",
